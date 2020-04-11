@@ -82,4 +82,7 @@ endif ()
 
 include(configure)
 
+include(SystemSummary)
+system_summary()
+
 
