@@ -20,4 +20,11 @@ jobs:
         mkdir -p build
         cd build
         cmake ../master
+    - name: Read config.h
+      id: config_h
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: build/config.h
+    - name: Echo config.h
+      run: echo ${{ steps.config_h.outputs.content }}
 

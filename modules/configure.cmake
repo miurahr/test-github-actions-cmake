@@ -53,10 +53,10 @@ check_type_size("int" SIZEOF_INT)
 check_type_size("unsigned long" SIZEOF_UNSIGNED_LONG)
 check_type_size("void*" SIZEOF_VOIDP)
 
-#check_include_file("ieeefp.h" HAVE_IEEEFP_H)
-#if(HAVE_IEEEFP_H)
-set(HAVE_IEEEFP TRUE)
-#endif()
+check_include_file("ieeefp.h" HAVE_IEEEFP_H)
+if(HAVE_IEEEFP_H)
+  set(HAVE_IEEEFP TRUE)
+endif()
 
 if (SQLITE3_FOUND AND NOT WITH_SQLITE3_EXTERNAL)
   set(SQLITE_COL_TEST_CODE "#ifdef __cplusplus
