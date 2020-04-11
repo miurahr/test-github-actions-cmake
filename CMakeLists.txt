@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.14)
 cmake_policy(SET CMP0023 NEW)
 cmake_policy(SET CMP0025 NEW)
@@ -32,57 +31,11 @@ cmake_policy(SET CMP0094 NEW)
 
 project(example LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-
-set(CMAKE_MODULE_PATH  ${CMAKE_CURRENT_LIST_DIR}/modules ${CMAKE_MODULE_PATH})
-
-if (CMAKE_COMPILER_IS_GNUCXX)
-  execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
-  if (GCC_VERSION VERSION_GREATER 5.1 OR GCC_VERSION VERSION_EQUAL 5.1)
-    message(STATUS "GNU C++ 5.1 or later detected. It uses C++11 New ABI.")
-    set(GNUCXX_NEW_ABI true)
-  endif ()
-endif ()
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wno-unused-command-line-argument)
-endif ()
-if (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif ()
-
-if (MSVC)
-  set(CMAKE_DEBUG_POSTFIX "d")
-  add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -wd4127 -wd4251 -wd4275 -wd4786 -wd4100 -wd4245 -wd4206 -wd4018 -wd4389")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd4127 -wd4251 -wd4275 -wd4786 -wd4100 -wd4245 -wd4206 -wd4018 -wd4389")
-  add_definitions(-DNOMINMAX)
-endif ()
-
-include(CheckCompilerMachineOption)
-include(CheckCompilerSIMDFeature)
-
-if ("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "(x86|AMD64)")
-  set(ARCH_FLAG)
-  check_compiler_machine_option(flag SSE)
-  list(APPEND ARCH_FLAG ${flag})
-  check_compiler_machine_option(flag SSSE3)
-  list(APPEND ARCH_FLAG ${flag})
-  check_compiler_machine_option(flag AVX)
-  list(APPEND ARCH_FLAG ${flag})
-
-  check_compiler_simd_feature(RESULT res FLAG ${ARCH_FLAG} QUERY HAVE_SSE)
-  set(HAVE_SSE_AT_COMPILE_TIME ${res})
-  check_compiler_simd_feature(RESULT res FLAG ${ARCH_FLAG} QUERY HAVE_SSSE3)
-  set(HAVE_SSSE3_AT_COMPILE_TIME ${res})
-  check_compiler_simd_feature(RESULT res FLAG ${ARCH_FLAG} QUERY HAVE_AVX)
-  set(HAVE_AVX_AT_COMPILE_TIME ${res})
-endif ()
-
-include(configure)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/modules ${CMAKE_MODULE_PATH})
 
 include(SystemSummary)
 system_summary()
 
+include(configure)
+configure_file(config.h.in config.h @ONLY)
 
