@@ -418,6 +418,6 @@ if (UNIX)
   endif ()
 endif ()
 
-configure_file(config.h.in cpl_config.h @ONLY)
+configure_file(config.h.in config.h @ONLY)
 
 # vim: ts=4 sw=4 sts=4 et

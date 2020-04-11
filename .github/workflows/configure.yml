@@ -1,0 +1,23 @@
+name: Run CMake
+
+on: push
+
+jobs:
+  configure:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+      with:
+        path: master
+    - run: |
+        cmake --version
+    - name: Configure
+      run: |
+        mkdir -p build
+        cd build
+        cmake ../master
+
